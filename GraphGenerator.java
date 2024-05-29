@@ -109,13 +109,4 @@ public class GraphGenerator extends JFrame{
         setContentPane(chartPanel);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            GraphGenerator example = new GraphGenerator("Price Volume Chart Demo");
-            example.setSize(800, 600);
-            example.setLocationRelativeTo(null);
-            example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-            example.setVisible(true);
-        });
-    }
 }

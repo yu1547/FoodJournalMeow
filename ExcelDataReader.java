@@ -33,10 +33,20 @@ public class ExcelDataReader {
             Sheet sheet = workbook.getSheetAt(0); // Assuming data is on the first sheet
 
             // Get the last date in the data
-            int lastRow = sheet.getLastRowNum();
+            int lastRow = sheet.getPhysicalNumberOfRows()-1;
             Row lastRowData = sheet.getRow(lastRow);
             Cell lastDateCell = lastRowData.getCell(0);
-            lastDate = lastDateCell.getDateCellValue();
+            if (lastDateCell != null) {
+                if (lastDateCell.getCellType() == CellType.NUMERIC) {
+                    lastDate = lastDateCell.getDateCellValue();
+                } else if (lastDateCell.getCellType() == CellType.STRING) {
+                    String dateString = lastDateCell.getStringCellValue();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    lastDate = dateFormat.parse(dateString);
+                } else {
+                    lastDate = null;
+                }
+            }
 
             // Calculate the start date for the chart based on the last date
             Calendar calendar = Calendar.getInstance();
@@ -53,25 +63,24 @@ public class ExcelDataReader {
             calendar.add(Calendar.DAY_OF_YEAR, -daysToSubtract);
             startDate = calendar.getTime();
             
-            for (int i = 1; i <= sheet.getLastRowNum(); i++) { // Start from the second row
+            for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) { // Start from the second row
                 Row row = sheet.getRow(i);
-    
+                
                 Cell dateCell = row.getCell(0);
                 Cell heightCell = row.getCell(1);
                 Cell weightCell = row.getCell(2);
     
                 if (dateCell != null && heightCell != null && weightCell != null) {
-                    java.util.Date dateValue;
+                    Date dateValue;
                     if (dateCell.getCellType() == CellType.NUMERIC) {
+                        // Handle numeric date format
                         dateValue = dateCell.getDateCellValue();
                     } else if (dateCell.getCellType() == CellType.STRING) {
-                        // Parse the string date into a Date object
-                        // This assumes that the string date is in a format that can be parsed by SimpleDateFormat
+                        // Handle string date format (e.g., "yyyy-MM-dd")
                         String dateString = dateCell.getStringCellValue();
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd"); // Change the format as per your data
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         dateValue = dateFormat.parse(dateString);
                     } else {
-                        // Handle other cell types as needed
                         dateValue = null;
                     }
                     if (dateValue != null) {
