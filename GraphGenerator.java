@@ -61,7 +61,6 @@ public class GraphGenerator extends JFrame{
 
         if(maxHeight == minHeight)
         {
-            heightSeries.addOrUpdate(heightSeries.getTimePeriod(1), heightSeries.getValue(1).doubleValue() + 0.01);
             NumberAxis heightAxis = (NumberAxis) plot.getRangeAxis(0);
             heightAxis.setRange(minHeight - 2, maxHeight + 2);
             heightAxis.setTickUnit(new NumberTickUnit(1));
