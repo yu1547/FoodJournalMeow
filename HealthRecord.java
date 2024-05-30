@@ -82,19 +82,15 @@ public class HealthRecord {
             Double lastHeight = getLastRecordValue(sheet, 1);
             Double lastWeight = getLastRecordValue(sheet, 2);
 
-            Scanner scanner = new Scanner(System.in);
+            if (height == 0.0 && lastHeight != null && weight != 0.0) {
+                height = lastHeight;
+            }
+            else if (weight == 0.0 && lastWeight != null && height != 0.0) {
+                weight = lastWeight;
+            }
+            
+
             sheet = workbook.getSheetAt(0);
-
-            System.out.println("Enter height (in cm) or press Enter to use the last recorded height (" + (lastHeight != null ? lastHeight : "N/A") + "): ");
-            String heightInput = scanner.nextLine();
-            double height = heightInput.isEmpty() && lastHeight != null ? lastHeight : Double.parseDouble(heightInput);
-
-            System.out.println("Enter weight (in kg) or press Enter to use the last recorded weight (" + (lastWeight != null ? lastWeight : "N/A") + "): ");
-            String weightInput = scanner.nextLine();
-            double weight = weightInput.isEmpty() && lastWeight != null ? lastWeight : Double.parseDouble(weightInput);
-
-            this.height = height;
-            this.weight = weight;
 
             Row existingRow = findRowByDate(sheet, date);
             if (existingRow != null) {

@@ -24,9 +24,10 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
 public class GraphGenerator extends JFrame{
-    String choose = "week";
-    public GraphGenerator(String title) {
+    private String choose;
+    public GraphGenerator(String title, String choose) {
         super(title);
+        this.choose = choose;
 
         // Create the time series for price and volume
         TimeSeries heightSeries = new TimeSeries("Height (cm)");
@@ -35,8 +36,11 @@ public class GraphGenerator extends JFrame{
         // Read data from Excel file using ExcelDataReader
         ExcelDataReader reader = new ExcelDataReader(choose);
         reader.readData(heightSeries, weightSeries);
+        double minHeight = heightSeries.getMinY();
+        double maxHeight = heightSeries.getMaxY();
         double minWeight = weightSeries.getMinY();
         double maxWeight = weightSeries.getMaxY();
+
         // Create datasets
         TimeSeriesCollection heightDataset = new TimeSeriesCollection(heightSeries);
         TimeSeriesCollection weightDataset = new TimeSeriesCollection(weightSeries);
@@ -54,6 +58,14 @@ public class GraphGenerator extends JFrame{
 
         XYPlot plot = chart.getXYPlot();
 
+
+        if(maxHeight == minHeight)
+        {
+            heightSeries.addOrUpdate(heightSeries.getTimePeriod(1), heightSeries.getValue(1).doubleValue() + 0.01);
+            NumberAxis heightAxis = (NumberAxis) plot.getRangeAxis(0);
+            heightAxis.setRange(minHeight - 2, maxHeight + 2);
+            heightAxis.setTickUnit(new NumberTickUnit(1));
+        }
         // Configure the price renderer
         XYLineAndShapeRenderer heightRenderer = new XYLineAndShapeRenderer();
         heightRenderer.setSeriesPaint(0, java.awt.Color.RED);
@@ -61,11 +73,11 @@ public class GraphGenerator extends JFrame{
 
         // Create a secondary axis for the volume data
         NumberAxis weightAxis = new NumberAxis("Weight");
-        weightAxis.setRange(minWeight-1, maxWeight+1);
+        weightAxis.setRange(minWeight-2, maxWeight+2);
         weightAxis.setNumberFormatOverride(new java.text.DecimalFormat("###,##0.00"));
         if(reader.getMaxWeightGap() >= 1)
         {
-            weightAxis.setTickUnit(new NumberTickUnit(5));
+            weightAxis.setTickUnit(new NumberTickUnit(1));
         }
         else if(reader.getMaxWeightGap() < 1)
         {
@@ -107,6 +119,10 @@ public class GraphGenerator extends JFrame{
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new Dimension(800, 600));
         setContentPane(chartPanel);
+    }
+
+    public ChartPanel getChartPanel() {
+        return (ChartPanel) getContentPane();
     }
 
 }
