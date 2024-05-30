@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class View1 extends JPanel {
     private JRadioButton breakfastButton;
@@ -16,7 +18,11 @@ public class View1 extends JPanel {
     private JRadioButton pdfButton;
     private JLabel photoLabel;
 
+    private String selectedPhotoPath;
+    private Meals meals;
+
     public View1() {
+        meals = new Meals();
         setLayout(new BorderLayout());
 
         // 加入貓爪圖片和標題
@@ -140,23 +146,32 @@ public class View1 extends JPanel {
     // 照片選擇邏輯
     private void choosePhoto() {
         String path = getFilePath();
-        if(path != null) {
-            //將path存入meal
-            //todo
+        if (path != null) {
+            selectedPhotoPath = path;
+            ImageIcon photoIcon = new ImageIcon(path);
+            photoLabel.setIcon(photoIcon);
         }
     }
 
     // 新增按鈕的事件處理器
     private void addEntry() {
-        //將餐點類型(早午晚餐)、照片路徑、心情存入meal，再把meal存入Meals
+        String type = getSelectedMealType();
+        if (type == null || selectedPhotoPath == null || selectedPhotoPath.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "請選擇餐點類型和照片");
+            return;
+        }
 
-        
+        String mood = moodField.getText();
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+        meals.addFoodItem(date, type, mood, selectedPhotoPath);
+        JOptionPane.showMessageDialog(this, "餐點已新增");
     }
 
     // 存檔按鈕的事件處理器
     private void saveEntry() {
-        // 存檔按鈕的事件處理器
-        //使用Meals中的exportMealImage，將圖片製作，並顯示在視窗上
+        meals.exportMealImage();
+        JOptionPane.showMessageDialog(this, "圖片已存檔");
     }
 
     // 匯出圖片按鈕的事件處理器
@@ -173,9 +188,21 @@ public class View1 extends JPanel {
             String filePath = selectedFile.getAbsolutePath();
 
             // 檢查選擇的檔案是否存在
-            if(new File(filePath).exists()) {
+            if (new File(filePath).exists()) {
                 return filePath;
             }
+        }
+        return null;
+    }
+
+    // 獲取選中的餐點類型
+    private String getSelectedMealType() {
+        if (breakfastButton.isSelected()) {
+            return "早餐";
+        } else if (lunchButton.isSelected()) {
+            return "午餐";
+        } else if (dinnerButton.isSelected()) {
+            return "晚餐";
         }
         return null;
     }
