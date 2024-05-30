@@ -141,17 +141,22 @@ public class View1 extends JPanel {
     private void choosePhoto() {
         String path = getFilePath();
         if(path != null) {
+            //將path存入meal
+            //todo
         }
     }
 
     // 新增按鈕的事件處理器
     private void addEntry() {
-        // 新增按鈕的事件處理器
+        //將餐點類型(早午晚餐)、照片路徑、心情存入meal，再把meal存入Meals
+
+        
     }
 
     // 存檔按鈕的事件處理器
     private void saveEntry() {
         // 存檔按鈕的事件處理器
+        //使用Meals中的exportMealImage，將圖片製作，並顯示在視窗上
     }
 
     // 匯出圖片按鈕的事件處理器
