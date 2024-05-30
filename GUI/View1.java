@@ -17,11 +17,13 @@ public class View1 extends JPanel {
     private JRadioButton jpgButton;
     private JRadioButton pdfButton;
     private JLabel photoLabel;
+    private Exporter exporter;
 
     private String selectedPhotoPath;
     private Meals meals;
 
     public View1() {
+        exporter = new Exporter();
         meals = new Meals();
         setLayout(new BorderLayout());
 
@@ -122,7 +124,7 @@ public class View1 extends JPanel {
         exportPanel.add(new JLabel("匯出圖片"));
 
         ButtonGroup exportGroup = new ButtonGroup();
-        jpgButton = new JRadioButton("jpg");
+        jpgButton = new JRadioButton("png");
         pdfButton = new JRadioButton("pdf");
 
         exportGroup.add(jpgButton);
@@ -174,10 +176,32 @@ public class View1 extends JPanel {
         JOptionPane.showMessageDialog(this, "圖片已存檔");
     }
 
-    // 匯出圖片按鈕的事件處理器
-    private void exportImage() {
-        // 匯出圖片按鈕的事件處理器
+
+
+    // 獲取選中的餐點類型
+    private String getSelectedMealType() {
+        if (breakfastButton.isSelected()) {
+            return "早餐";
+        } else if (lunchButton.isSelected()) {
+            return "午餐";
+        } else if (dinnerButton.isSelected()) {
+            return "晚餐";
+        }
+        return null;
     }
+
+    private void exportImage() {
+    if (jpgButton.isSelected()) {
+        String filePath = getFilePath();  // 從檔案總管選擇一張照片並獲取其路徑
+        if (filePath != null) {  // 如果成功選擇了一張照片
+            exporter.exportPng(filePath);  // 使用 Exporter 的實例來調用 exportPng 方法
+        }
+    } else if (pdfButton.isSelected()) {
+        exporter.imagesToPDF();  // 使用 Exporter 的實例來調用 imagesToPDF 方法
+    }
+}
+
+
 
     // 從檔案總管選擇一張照片並回傳其路徑
     private String getFilePath() {
@@ -188,21 +212,9 @@ public class View1 extends JPanel {
             String filePath = selectedFile.getAbsolutePath();
 
             // 檢查選擇的檔案是否存在
-            if (new File(filePath).exists()) {
+            if(new File(filePath).exists()) {
                 return filePath;
             }
-        }
-        return null;
-    }
-
-    // 獲取選中的餐點類型
-    private String getSelectedMealType() {
-        if (breakfastButton.isSelected()) {
-            return "早餐";
-        } else if (lunchButton.isSelected()) {
-            return "午餐";
-        } else if (dinnerButton.isSelected()) {
-            return "晚餐";
         }
         return null;
     }
