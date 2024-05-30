@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class View1 extends JPanel {
     private JRadioButton breakfastButton;
@@ -138,7 +139,9 @@ public class View1 extends JPanel {
 
     // 照片選擇邏輯
     private void choosePhoto() {
-        // 照片選擇邏輯
+        String path = getFilePath();
+        if(path != null) {
+        }
     }
 
     // 新增按鈕的事件處理器
@@ -154,5 +157,21 @@ public class View1 extends JPanel {
     // 匯出圖片按鈕的事件處理器
     private void exportImage() {
         // 匯出圖片按鈕的事件處理器
+    }
+
+    // 從檔案總管選擇一張照片並回傳其路徑
+    private String getFilePath() {
+        JFileChooser fileChooser = new JFileChooser();
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            String filePath = selectedFile.getAbsolutePath();
+
+            // 檢查選擇的檔案是否存在
+            if(new File(filePath).exists()) {
+                return filePath;
+            }
+        }
+        return null;
     }
 }
