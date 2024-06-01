@@ -27,14 +27,17 @@ public class View3 extends JPanel {
     private ButtonGroup chartOption = new ButtonGroup();
     private ChartPanel chartPanel;
     public View3() {
+        setLayout(new BorderLayout());
 
         ImageIcon icon = new ImageIcon("cat.png");
         JLabel titleLabel = new JLabel("身高體重紀錄", icon, JLabel.LEFT);
         titleLabel.setFont(new Font("Serif", Font.BOLD, 20));
         
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        titlePanel.setBackground(new Color(255, 245, 238)); // 背景色
         titlePanel.add(titleLabel);
+        titlePanel.setBackground(new Color(255, 245, 238)); // 背景色
+
+        add(titlePanel, BorderLayout.NORTH);
 
         //主版面
         mainPanel = new JPanel(new BorderLayout());
@@ -46,6 +49,7 @@ public class View3 extends JPanel {
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
         inputPanel.setBackground(new Color(255, 245, 238)); // 背景色
         inputPanel.setBorder(BorderFactory.createTitledBorder("輸入"));
+        mainPanel.add(inputPanel, BorderLayout.EAST);
 
         //身高
         heightPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -80,7 +84,11 @@ public class View3 extends JPanel {
         inputPanel.add(weightPanel);
         inputPanel.add(addButton);
         inputPanel.add(radioPanel);
-        mainPanel.add(inputPanel, BorderLayout.EAST);
+
+        //圖表區
+        chartPanel = new ChartPanel(null);
+        chartPanel.setBackground(new Color(255, 245, 238)); // 背景色
+        mainPanel.add(chartPanel, BorderLayout.CENTER);
 
         addButton.addActionListener(new MyEventListener());
         heightField.addActionListener(new MyEventListener());
