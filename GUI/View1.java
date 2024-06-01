@@ -29,7 +29,7 @@ public class View1 extends JPanel {
         exporter = new Exporter();
         meals = new Meals();
         setLayout(new BorderLayout());
-        selectedPhotoPath = "defult.png";
+        selectedPhotoPath = "default2.png";
 
 
         // 加入貓爪圖片和標題
@@ -159,7 +159,7 @@ public class View1 extends JPanel {
             photoLabel.setIcon(photoIcon);
         }
         else{
-            selectedPhotoPath = "defult.png";
+            selectedPhotoPath = "default2.png";
         }
     }
 
@@ -176,7 +176,7 @@ public class View1 extends JPanel {
 
         meals.addFoodItem(date, type, mood, selectedPhotoPath);
         JOptionPane.showMessageDialog(this, "餐點已新增");
-        selectedPhotoPath = "defult.png";
+        selectedPhotoPath = "default2.png";
     }
 
     // 存檔按鈕的事件處理器

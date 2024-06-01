@@ -27,6 +27,10 @@ public class Meal {
     public String getImagePath() {
         return imagePath;
     }
+    public void setImagePath( String imagePath) {
+        this.imagePath=imagePath;
+        return;
+    }
 
     @Override
     public String toString() {
