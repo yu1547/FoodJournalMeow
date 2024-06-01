@@ -1,3 +1,4 @@
+package ntou.cs.java2024;
 import java.util.*;
 import javax.imageio.ImageIO;
 import java.awt.Color;
@@ -12,8 +13,8 @@ import java.util.Date;
 
 public class Meals {
     private Map<String, Meal> meals;
-    private final String DEFAULT_IMAGE_PATH1 = "default1.png";
-    private final String DEFAULT_IMAGE_PATH2 = "default2.png";
+    private final String DEFAULT_IMAGE_PATH1 = "images/default1.png";
+    private final String DEFAULT_IMAGE_PATH2 = "images/default2.png";
 
     public Meals() {
         this.meals = new LinkedHashMap<>();
@@ -36,7 +37,7 @@ public class Meals {
 
     public void exportMealImage() {
         try {
-            BufferedImage background = ImageIO.read(new File("background.png"));
+            BufferedImage background = ImageIO.read(new File("images/background.png"));
             Graphics g = background.getGraphics();
 
             // 設定字型顏色和大小
@@ -44,7 +45,7 @@ public class Meals {
             g.setFont(new Font("標楷體", Font.BOLD, 20));
 
             // 繪製日期
-            String date = meals.containsKey("早餐") ? meals.get("早餐").getDate() : new SimpleDateFormat("yy-MM-dd").format(new Date());
+            String date =  new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             g.drawString(date, 10, 30);
 
             int mealWidth = (int)(background.getWidth() * 0.4);
@@ -99,7 +100,7 @@ public class Meals {
             g.dispose();
 
             // 將結果寫入到新的圖片檔案
-            ImageIO.write(background, "png", new File(date + ".png"));
+            ImageIO.write(background, "png", new File("results/"+date + ".png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

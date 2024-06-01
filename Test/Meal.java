@@ -1,3 +1,4 @@
+package ntou.cs.java2024;
 // Meal.java
 public class Meal {
     private String date;
@@ -9,7 +10,7 @@ public class Meal {
         this.date = date;
         this.type = type;
         this.mood = mood.equals("x") ? "" : mood;
-        this.imagePath = imagePath.equals("x") ? "default.png" : imagePath;
+        this.imagePath = imagePath.equals("x") ? "images/default.png" : imagePath;
     }
 
     public String getDate() {
