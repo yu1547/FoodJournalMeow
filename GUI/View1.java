@@ -1,8 +1,11 @@
 import javax.swing.*;
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -26,6 +29,8 @@ public class View1 extends JPanel {
         exporter = new Exporter();
         meals = new Meals();
         setLayout(new BorderLayout());
+        selectedPhotoPath = "defult.png";
+
 
         // 加入貓爪圖片和標題
         ImageIcon icon = new ImageIcon("cat.png");
@@ -153,13 +158,16 @@ public class View1 extends JPanel {
             ImageIcon photoIcon = new ImageIcon(path);
             photoLabel.setIcon(photoIcon);
         }
+        else{
+            selectedPhotoPath = "defult.png";
+        }
     }
 
     // 新增按鈕的事件處理器
     private void addEntry() {
         String type = getSelectedMealType();
         if (type == null || selectedPhotoPath == null || selectedPhotoPath.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "請選擇餐點類型和照片");
+            JOptionPane.showMessageDialog(this, "請選擇餐點類型");
             return;
         }
 
@@ -168,12 +176,23 @@ public class View1 extends JPanel {
 
         meals.addFoodItem(date, type, mood, selectedPhotoPath);
         JOptionPane.showMessageDialog(this, "餐點已新增");
+        selectedPhotoPath = "defult.png";
     }
 
     // 存檔按鈕的事件處理器
     private void saveEntry() {
         meals.exportMealImage();
         JOptionPane.showMessageDialog(this, "圖片已存檔");
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(new File(date+".png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ImageIcon photoIcon = new ImageIcon(img);
+        photoLabel.setIcon(null);
+        photoLabel.setIcon(photoIcon);
     }
 
 

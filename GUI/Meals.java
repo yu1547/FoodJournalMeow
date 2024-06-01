@@ -15,19 +15,22 @@ public class Meals {
     public Meals() {
         this.meals = new LinkedHashMap<>();
     }
-
+    public void removeFoodItem(String type) {
+        meals.remove(type);
+        System.out.println("已移除" + type );
+    }
     public void addFoodItem(String date, String type, String mood, String imagePath) {
         if (meals.containsKey(type)) {
+            removeFoodItem(type);
             System.out.println("已添加過" + type + "!請先刪除再新增");
-            return;
+            // return;
         }
         Meal meal = new Meal(date, type, mood, imagePath);
         meals.put(type, meal);
+        System.out.println("添加了" + type );
     }
 
-    public void removeFoodItem(String type) {
-        meals.remove(type);
-    }
+
 
     public void exportMealImage() {
         try {
