@@ -153,7 +153,7 @@ public class View1 extends JPanel {
 
     // 照片選擇邏輯
     private void choosePhoto() {
-        String path = getFilePath();
+        String path = getFilePath2();
         if (path != null) {
             selectedPhotoPath = path;
             ImageIcon photoIcon = new ImageIcon(path);
@@ -239,4 +239,21 @@ public class View1 extends JPanel {
         }
         return null;
     }
+
+private String getFilePath2() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("選擇圖片");
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            String filePath = selectedFile.getAbsolutePath();
+
+            // 檢查選擇的檔案是否存在
+            if(new File(filePath).exists()) {
+                return filePath;
+            }
+        }
+        return null;
+    }
+
 }
