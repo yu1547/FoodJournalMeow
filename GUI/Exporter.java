@@ -13,7 +13,7 @@ public class Exporter {
    public void exportPng(String filename) {
         // Show file chooser to select save location
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Select Save Location");
+        fileChooser.setDialogTitle("選擇儲存的地點");
 
         int userSelection = fileChooser.showSaveDialog(null);
 
@@ -36,15 +36,29 @@ public class Exporter {
     }
 
     public void imagesToPDF() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setMultiSelectionEnabled(true);
-        int returnValue = fileChooser.showOpenDialog(null);
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File[] selectedFiles = fileChooser.getSelectedFiles();
+    JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("選擇圖片(可複選)");
+    fileChooser.setMultiSelectionEnabled(true);
+    int returnValue = fileChooser.showOpenDialog(null);
+    if (returnValue == JFileChooser.APPROVE_OPTION) {
+        File[] selectedFiles = fileChooser.getSelectedFiles();
+
+        // Show file chooser to select save location for PDF
+        JFileChooser pdfFileChooser = new JFileChooser();
+        pdfFileChooser.setDialogTitle("選擇儲存的地點");
+
+        int userSelection = pdfFileChooser.showSaveDialog(null);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File pdfFileToSave = pdfFileChooser.getSelectedFile();
+            // Add file extension if not provided
+            if (!pdfFileToSave.getAbsolutePath().endsWith(".pdf")) {
+                pdfFileToSave = new File(pdfFileToSave.getAbsolutePath() + ".pdf");
+            }
 
             Document document = new Document();
             try {
-                PdfWriter.getInstance(document, new FileOutputStream("output.pdf"));
+                PdfWriter.getInstance(document, new FileOutputStream(pdfFileToSave));
                 document.open();
 
                 for (File file : selectedFiles) {
@@ -56,10 +70,12 @@ public class Exporter {
                 }
 
                 document.close();
-                System.out.println("PDF Created!");
+                System.out.println("PDF Created at: " + pdfFileToSave.getAbsolutePath());
             } catch (DocumentException | IOException e) {
-                 e.printStackTrace();
+                e.printStackTrace();
             }
         }
     }
+}
+
 }
