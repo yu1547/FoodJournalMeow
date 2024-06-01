@@ -1,3 +1,4 @@
+package ntou.cs.java2024;
 import javax.swing.*;
 
 import org.jfree.chart.ChartPanel;
@@ -29,7 +30,7 @@ public class View3 extends JPanel {
     public View3() {
         setLayout(new BorderLayout());
 
-        ImageIcon icon = new ImageIcon("cat.png");
+        ImageIcon icon = new ImageIcon("images/cat.png");
         JLabel titleLabel = new JLabel("身高體重紀錄", icon, JLabel.LEFT);
         titleLabel.setFont(new Font("Serif", Font.BOLD, 20));
         

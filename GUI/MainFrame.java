@@ -1,3 +1,4 @@
+package ntou.cs.java2024;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -29,7 +30,7 @@ public class MainFrame extends JFrame {
         navPanel.setBackground(new Color(255, 228, 225)); // 導覽列背景色
 
         // 加入貓爪圖片
-        ImageIcon icon = new ImageIcon("cat.png");
+        ImageIcon icon = new ImageIcon("images/cat.png");
 
         JButton btn1 = createNavButton("生成食記圖", icon);
         btn1.addActionListener(new ActionListener() {

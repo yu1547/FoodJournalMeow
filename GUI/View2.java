@@ -1,3 +1,4 @@
+package ntou.cs.java2024;
 import javax.swing.*;
 import java.awt.*;
 

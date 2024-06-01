@@ -1,3 +1,4 @@
+package ntou.cs.java2024;
 import javax.swing.*;
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -29,11 +30,11 @@ public class View1 extends JPanel {
         exporter = new Exporter();
         meals = new Meals();
         setLayout(new BorderLayout());
-        selectedPhotoPath = "default2.png";
+        selectedPhotoPath = "images/default2.png";
 
 
         // 加入貓爪圖片和標題
-        ImageIcon icon = new ImageIcon("cat.png");
+        ImageIcon icon = new ImageIcon("images/cat.png");
         JLabel titleLabel = new JLabel("生成食記圖", icon, JLabel.LEFT);
         titleLabel.setFont(new Font("Serif", Font.BOLD, 20));
 
@@ -159,7 +160,7 @@ public class View1 extends JPanel {
             photoLabel.setIcon(photoIcon);
         }
         else{
-            selectedPhotoPath = "default2.png";
+            selectedPhotoPath = "images/default2.png";
         }
     }
 
@@ -176,7 +177,7 @@ public class View1 extends JPanel {
 
         meals.addFoodItem(date, type, mood, selectedPhotoPath);
         JOptionPane.showMessageDialog(this, "餐點已新增");
-        selectedPhotoPath = "default2.png";
+        selectedPhotoPath = "images/default2.png";
     }
 
     // 存檔按鈕的事件處理器
@@ -186,7 +187,7 @@ public class View1 extends JPanel {
         String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         BufferedImage img = null;
         try {
-            img = ImageIO.read(new File(date+".png"));
+            img = ImageIO.read(new File("results/"+date+".png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
