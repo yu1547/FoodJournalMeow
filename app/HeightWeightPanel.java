@@ -11,7 +11,7 @@ import java.awt.event.ItemListener;
 import java.io.File;
 import java.time.LocalDate;
 
-public class View3 extends JPanel {
+public class HeightWeightPanel extends JPanel {
     private JTextField heightField;
     private JTextField weightField;
     private JButton addButton;
@@ -27,7 +27,7 @@ public class View3 extends JPanel {
     private JRadioButton thirtyDaysRadioButton;
     private ButtonGroup chartOption = new ButtonGroup();
     private ChartPanel chartPanel;
-    public View3() {
+    public HeightWeightPanel() {
         setLayout(new BorderLayout());
 
         ImageIcon icon = new ImageIcon("images/cat.png");

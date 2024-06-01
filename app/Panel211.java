@@ -2,8 +2,8 @@ package ntou.cs.java2024;
 import javax.swing.*;
 import java.awt.*;
 
-public class View2 extends JPanel {
-    public View2() {
+public class Panel211 extends JPanel {
+    public Panel211() {
         setLayout(new BorderLayout());
         JLabel label = new JLabel("211餐盤", JLabel.CENTER);
         label.setFont(new Font("Serif", Font.BOLD, 40));

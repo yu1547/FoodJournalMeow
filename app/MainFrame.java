@@ -20,9 +20,9 @@ public class MainFrame extends JFrame {
         mainPanel = new JPanel(cardLayout);
 
         // 加入各個視窗到主面板
-        mainPanel.add(new View1(), "View1");
-        mainPanel.add(new View2(), "View2");
-        mainPanel.add(new View3(), "View3");
+        mainPanel.add(new MealPanel(), "MealPanel");
+        mainPanel.add(new Panel211(), "Panel211");
+        mainPanel.add(new HeightWeightPanel(), "HeightWeightPanel");
 
         // 設定導覽列
         JPanel navPanel = new JPanel();
@@ -36,7 +36,7 @@ public class MainFrame extends JFrame {
         btn1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(mainPanel, "View1");
+                cardLayout.show(mainPanel, "MealPanel");
             }
         });
 
@@ -44,7 +44,7 @@ public class MainFrame extends JFrame {
         btn2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(mainPanel, "View2");
+                cardLayout.show(mainPanel, "Panel211");
             }
         });
 
@@ -52,7 +52,7 @@ public class MainFrame extends JFrame {
         btn3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(mainPanel, "View3");
+                cardLayout.show(mainPanel, "HeightWeightPanel");
             }
         });
 

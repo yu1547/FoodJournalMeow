@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class View1 extends JPanel {
+public class MealPanel extends JPanel {
     private JRadioButton breakfastButton;
     private JRadioButton lunchButton;
     private JRadioButton dinnerButton;
@@ -26,7 +26,7 @@ public class View1 extends JPanel {
     private String selectedPhotoPath;
     private Meals meals;
 
-    public View1() {
+    public MealPanel() {
         exporter = new Exporter();
         meals = new Meals();
         setLayout(new BorderLayout());
