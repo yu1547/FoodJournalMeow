@@ -37,7 +37,7 @@ public class Exporter {
     }
 
     public void imagesToPDF() {
-    JFileChooser fileChooser = new JFileChooser();
+    JFileChooser fileChooser = new JFileChooser(new File("./results"));
     fileChooser.setDialogTitle("選擇圖片(可複選)");
     fileChooser.setMultiSelectionEnabled(true);
     int returnValue = fileChooser.showOpenDialog(null);

@@ -225,7 +225,7 @@ public class View1 extends JPanel {
 
     // 從檔案總管選擇一張照片並回傳其路徑
     private String getFilePath() {
-        JFileChooser fileChooser = new JFileChooser();
+        JFileChooser fileChooser = new JFileChooser(new File("./results"));
         fileChooser.setDialogTitle("選擇圖片");
         int returnValue = fileChooser.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
