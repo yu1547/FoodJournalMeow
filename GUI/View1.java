@@ -104,25 +104,31 @@ public class View1 extends JPanel {
         moodPanel.add(moodField);
         controlPanel.add(moodPanel);
 
-        // 新增按鈕
-        addButton = new JButton("新增");
+        // 新增餐點按鈕
+        addButton = new JButton("新增餐點");
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 addEntry();
             }
         });
-        controlPanel.add(addButton);
+        JPanel addButtonPanel = new JPanel();
+        addButtonPanel.add(addButton);
+        addButtonPanel.setBackground(new Color(255, 245, 238)); // 背景色
+        controlPanel.add(addButtonPanel);
 
-        // 存檔按鈕
-        saveButton = new JButton("存檔");
+        // 生成每日三餐圖按鈕
+        saveButton = new JButton("生成每日三餐圖");
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 saveEntry();
             }
         });
-        controlPanel.add(saveButton);
+        JPanel saveButtonPanel = new JPanel();
+        saveButtonPanel.add(saveButton);
+        saveButtonPanel.setBackground(new Color(255, 245, 238)); // 背景色
+        controlPanel.add(saveButtonPanel);
 
         // 匯出圖片選項
         JPanel exportPanel = new JPanel();
@@ -148,7 +154,10 @@ public class View1 extends JPanel {
                 exportImage();
             }
         });
-        controlPanel.add(exportButton);
+        JPanel exportButtonPanel = new JPanel();
+        exportButtonPanel.add(exportButton);
+        exportButtonPanel.setBackground(new Color(255, 245, 238)); // 背景色
+        controlPanel.add(exportButtonPanel);
     }
 
     // 照片選擇邏輯
