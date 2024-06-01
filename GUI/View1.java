@@ -1,13 +1,8 @@
 import javax.swing.*;
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class View1 extends JPanel {
     private JRadioButton breakfastButton;
@@ -20,17 +15,13 @@ public class View1 extends JPanel {
     private JRadioButton jpgButton;
     private JRadioButton pdfButton;
     private JLabel photoLabel;
-    private Exporter exporter;
+    private String photoPath;
 
-    private String selectedPhotoPath;
     private Meals meals;
 
     public View1() {
-        exporter = new Exporter();
         meals = new Meals();
         setLayout(new BorderLayout());
-        selectedPhotoPath = "defult.png";
-
 
         // 加入貓爪圖片和標題
         ImageIcon icon = new ImageIcon("cat.png");
@@ -63,24 +54,24 @@ public class View1 extends JPanel {
         mainPanel.add(controlPanel, BorderLayout.EAST);
 
         // 餐點選擇
+        JPanel mealPanel = new JPanel();
+        mealPanel.setBackground(new Color(255, 245, 238)); // 背景色
         ButtonGroup mealGroup = new ButtonGroup();
         breakfastButton = new JRadioButton("早餐");
         lunchButton = new JRadioButton("午餐");
         dinnerButton = new JRadioButton("晚餐");
-
-        JPanel mealPanel = new JPanel();
-        mealPanel.setBackground(new Color(255, 245, 238)); // 背景色
+        mealGroup.add(breakfastButton);
+        mealGroup.add(lunchButton);
+        mealGroup.add(dinnerButton);
         mealPanel.add(breakfastButton);
         mealPanel.add(lunchButton);
         mealPanel.add(dinnerButton);
 
-        mealGroup.add(breakfastButton);
-        mealGroup.add(lunchButton);
-        mealGroup.add(dinnerButton);
-
         controlPanel.add(mealPanel);
 
         // 照片選擇
+        JPanel photoSelectionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        photoSelectionPanel.setBackground(new Color(255, 245, 238)); // 背景色
         JButton choosePhotoButton = new JButton("選擇檔案");
         choosePhotoButton.addActionListener(new ActionListener() {
             @Override
@@ -88,9 +79,6 @@ public class View1 extends JPanel {
                 choosePhoto();
             }
         });
-
-        JPanel photoSelectionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        photoSelectionPanel.setBackground(new Color(255, 245, 238)); // 背景色
         photoSelectionPanel.add(new JLabel("照片："));
         photoSelectionPanel.add(choosePhotoButton);
         controlPanel.add(photoSelectionPanel);
@@ -103,17 +91,22 @@ public class View1 extends JPanel {
         moodPanel.add(moodField);
         controlPanel.add(moodPanel);
 
-        // 新增按鈕
-        addButton = new JButton("新增");
+        // 新增餐點按鈕
+        JPanel addPanel = new JPanel();
+        addPanel.setBackground(new Color(255, 245, 238)); // 背景色
+        addButton = new JButton("新增餐點");
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 addEntry();
             }
         });
-        controlPanel.add(addButton);
+        addPanel.add(addButton);
+        controlPanel.add(addPanel);
 
         // 存檔按鈕
+        JPanel savePanel = new JPanel();
+        savePanel.setBackground(new Color(255, 245, 238)); // 背景色
         saveButton = new JButton("存檔");
         saveButton.addActionListener(new ActionListener() {
             @Override
@@ -121,25 +114,27 @@ public class View1 extends JPanel {
                 saveEntry();
             }
         });
-        controlPanel.add(saveButton);
+        savePanel.add(saveButton);
+        controlPanel.add(savePanel);
 
-        // 匯出圖片選項
-        JPanel exportPanel = new JPanel();
-        exportPanel.setBackground(new Color(255, 245, 238)); // 背景色
-        exportPanel.add(new JLabel("匯出圖片"));
+        // 匯出圖片格式選擇
+        JPanel exportFormatPanel = new JPanel();
+        exportFormatPanel.setBackground(new Color(255, 245, 238)); // 背景色
+        exportFormatPanel.add(new JLabel("匯出圖片格式"));
 
         ButtonGroup exportGroup = new ButtonGroup();
-        jpgButton = new JRadioButton("png");
+        jpgButton = new JRadioButton("jpg");
         pdfButton = new JRadioButton("pdf");
-
         exportGroup.add(jpgButton);
         exportGroup.add(pdfButton);
+        exportFormatPanel.add(jpgButton);
+        exportFormatPanel.add(pdfButton);
 
-        exportPanel.add(jpgButton);
-        exportPanel.add(pdfButton);
-        controlPanel.add(exportPanel);
+        controlPanel.add(exportFormatPanel);
 
         // 匯出圖片按鈕
+        JPanel exportPanel = new JPanel();
+        exportPanel.setBackground(new Color(255, 245, 238)); // 背景色
         exportButton = new JButton("匯出圖片");
         exportButton.addActionListener(new ActionListener() {
             @Override
@@ -147,92 +142,63 @@ public class View1 extends JPanel {
                 exportImage();
             }
         });
-        controlPanel.add(exportButton);
+        exportPanel.add(exportButton);
+        controlPanel.add(exportPanel);
     }
 
     // 照片選擇邏輯
     private void choosePhoto() {
         String path = getFilePath();
         if (path != null) {
-            selectedPhotoPath = path;
+            photoPath = path;
             ImageIcon photoIcon = new ImageIcon(path);
             photoLabel.setIcon(photoIcon);
-        }
-        else{
-            selectedPhotoPath = "defult.png";
         }
     }
 
     // 新增按鈕的事件處理器
     private void addEntry() {
-        String type = getSelectedMealType();
-        if (type == null || selectedPhotoPath == null || selectedPhotoPath.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "請選擇餐點類型");
-            return;
+        String type = "";
+        if (breakfastButton.isSelected()) {
+            type = "早餐";
+        } else if (lunchButton.isSelected()) {
+            type = "午餐";
+        } else if (dinnerButton.isSelected()) {
+            type = "晚餐";
         }
-
         String mood = moodField.getText();
-        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-
-        meals.addFoodItem(date, type, mood, selectedPhotoPath);
-        JOptionPane.showMessageDialog(this, "餐點已新增");
-        selectedPhotoPath = "defult.png";
+        String date = java.time.LocalDate.now().toString(); // 使用當前日期
+        meals.addFoodItem(date, type, mood, photoPath);
     }
 
     // 存檔按鈕的事件處理器
     private void saveEntry() {
         meals.exportMealImage();
-        JOptionPane.showMessageDialog(this, "圖片已存檔");
-        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        BufferedImage img = null;
-        try {
-            img = ImageIO.read(new File(date+".png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        ImageIcon photoIcon = new ImageIcon(img);
-        photoLabel.setIcon(null);
-        photoLabel.setIcon(photoIcon);
+        String date = java.time.LocalDate.now().toString(); // 使用當前日期
+        ImageIcon savedImageIcon = new ImageIcon(date + ".png");
+        photoLabel.setIcon(savedImageIcon);
     }
 
-
-
-    // 獲取選中的餐點類型
-    private String getSelectedMealType() {
-        if (breakfastButton.isSelected()) {
-            return "早餐";
-        } else if (lunchButton.isSelected()) {
-            return "午餐";
-        } else if (dinnerButton.isSelected()) {
-            return "晚餐";
-        }
-        return null;
-    }
-
+    // 匯出圖片按鈕的事件處理器
     private void exportImage() {
-    if (jpgButton.isSelected()) {
-        String filePath = getFilePath();  // 從檔案總管選擇一張照片並獲取其路徑
-        if (filePath != null) {  // 如果成功選擇了一張照片
-            exporter.exportPng(filePath);  // 使用 Exporter 的實例來調用 exportPng 方法
+        // 根據選擇的格式進行圖片匯出
+        if (jpgButton.isSelected()) {
+            System.out.println("匯出成jpg格式");
+        } else if (pdfButton.isSelected()) {
+            System.out.println("匯出成pdf格式");
         }
-    } else if (pdfButton.isSelected()) {
-        exporter.imagesToPDF();  // 使用 Exporter 的實例來調用 imagesToPDF 方法
     }
-}
-
-
 
     // 從檔案總管選擇一張照片並回傳其路徑
     private String getFilePath() {
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("選擇圖片");
         int returnValue = fileChooser.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             String filePath = selectedFile.getAbsolutePath();
 
             // 檢查選擇的檔案是否存在
-            if(new File(filePath).exists()) {
+            if (new File(filePath).exists()) {
                 return filePath;
             }
         }
