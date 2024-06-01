@@ -1,10 +1,7 @@
 package ntou.cs.java2024;
 import java.util.*;
 import javax.imageio.ImageIO;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +35,10 @@ public class Meals {
     public void exportMealImage() {
         try {
             BufferedImage background = ImageIO.read(new File("images/background.png"));
-            Graphics g = background.getGraphics();
+            Graphics2D g = background.createGraphics();
+
+            // 開啟抗鋸齒
+            g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
             // 設定字型顏色和大小
             g.setColor(Color.BLACK);
@@ -99,8 +99,10 @@ public class Meals {
 
             g.dispose();
 
+            g.dispose();
+
             // 將結果寫入到新的圖片檔案
-            ImageIO.write(background, "png", new File("results/"+date + ".png"));
+            ImageIO.write(background, "png", new File("results/"+ new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
