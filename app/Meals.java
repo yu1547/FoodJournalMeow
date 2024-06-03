@@ -38,17 +38,17 @@ public class Meals {
             BufferedImage background = ImageIO.read(new File("images/background.png"));
             Graphics2D g = background.createGraphics();
 
-            // 开启抗锯齿和高质量渲染
+            // 開啟抗鋸齒和高質量渲染
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
             g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-            // 设置字体颜色和大小
+            // 設定字型顏色和大小
             g.setColor(Color.BLACK);
             Font font = new Font("標楷體", Font.BOLD, 20);
             g.setFont(font);
 
-            // 绘制日期
+            // 繪製日期
             String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             g.drawString(date, 10, 30);
 
@@ -84,37 +84,37 @@ public class Meals {
                         meal.setImagePath(DEFAULT_IMAGE_PATH2);
                     }
                 } else {
-                    meal = new Meal(date, types[i], "我没有吃" + types[i], DEFAULT_IMAGE_PATH1);
+                    meal = new Meal(date, types[i], "我沒有吃" + types[i], DEFAULT_IMAGE_PATH1);
                 }
 
                 BufferedImage foodImage = ImageIO.read(new File(meal.getImagePath()));
-                // 缩放食物图片以适应背景的一部分
+                // 縮放食物圖片以適應背景的一部分
                 BufferedImage scaledFoodImage = new BufferedImage(mealWidth, mealHeight, BufferedImage.TYPE_INT_ARGB);
                 Graphics2D g2d = scaledFoodImage.createGraphics();
                 g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
                 g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
                 g2d.drawImage(foodImage, 0, 0, mealWidth, mealHeight, null);
                 g2d.dispose();
-                // 将食物图片绘制到背景上的正确位置
-                x = (i % 2) == 0 ? (int) (background.getWidth() * 0.1) : (int) (background.getWidth() * 0.1 + mealWidth);
+                // 將食物圖片繪製到背景上的正確位置
+                x = (i % 2) == 0 ? (int) (background.getWidth() * 0.1) : (int) (background.getWidth() * 0.1+mealWidth);
                 y = (int) (background.getHeight() * 0.2) * (i + 1);
                 g.drawImage(scaledFoodImage, x, y, null);
-                // 如果有心情，将心情绘制到图片上
+                // 如果有心情，將心情繪製到圖片上
                 if (!meal.getMood().isEmpty()) {
                     int moodX;
                     int moodY;
                     switch (types[i]) {
                         case "早餐":
-                            moodX = (int) (x + mealWidth +5);
-                            moodY = (int) (background.getHeight() * 0.25); // 距离上面20%
+                            moodX = (int) (x+mealWidth);
+                            moodY = (int) (background.getHeight() * 0.25); // 距離上面20%
                             break;
                         case "午餐":
-                            moodX = (int) (background.getWidth() * 0.1 +5); // 距离左边10%
-                            moodY = (int) (background.getHeight() * 0.45); // 距离上面40%
+                            moodX = (int) (background.getWidth() * 0.1); // 距離左邊10%
+                            moodY = (int) (background.getHeight() * 0.45); // 距離上面40%
                             break;
                         case "晚餐":
-                            moodX = (int) (x + mealWidth +5);
-                            moodY = (int) (background.getHeight() * 0.65); // 距离上面60%
+                            moodX = (int) (x+mealWidth);
+                            moodY = (int) (background.getHeight() * 0.65); // 距離上面60%
                             break;
                         default:
                             moodX = 0;
@@ -127,7 +127,7 @@ public class Meals {
 
             g.dispose();
 
-            // 将结果写入到新的图片文件
+            // 將結果寫入到新的圖片檔案
             ImageIO.write(background, "png", new File("results/" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".png"));
         } catch (IOException e) {
             e.printStackTrace();
