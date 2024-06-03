@@ -45,7 +45,7 @@ public class Meals {
 
             // 设置字体颜色和大小
             g.setColor(Color.BLACK);
-            Font font = new Font("标楷体", Font.BOLD, 20);
+            Font font = new Font("標楷體", Font.BOLD, 20);
             g.setFont(font);
 
             // 绘制日期
@@ -54,7 +54,7 @@ public class Meals {
 
             // 绘制浮水印文字
             String watermarkText = "貓掌食記";
-            Font watermarkFont = new Font("标楷体", Font.BOLD, 20);
+            Font watermarkFont = new Font("標楷體", Font.BOLD, 20);
             g.setFont(watermarkFont);
             FontMetrics fm = g.getFontMetrics(watermarkFont);
             int textWidth = fm.stringWidth(watermarkText);
@@ -120,7 +120,7 @@ public class Meals {
                             moodX = 0;
                             moodY = 0;
                     }
-                    g.setFont(new Font("标楷体", Font.PLAIN, 16)); // 设置心情的字体大小
+                    g.setFont(new Font("標楷體", Font.PLAIN, 20)); // 设置心情的字体大小
                     g.drawString(meal.getMood(), moodX, moodY);
                 }
             }
