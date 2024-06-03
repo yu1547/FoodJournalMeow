@@ -55,6 +55,8 @@ public class MealPanel extends JPanel {
         photoLabel = new JLabel();
         photoPanel.add(photoLabel);
         mainPanel.add(photoPanel, BorderLayout.CENTER);
+        ImageIcon photoIcon = new ImageIcon("images/background.png");
+        photoLabel.setIcon(photoIcon);
 
         // 右邊的控制區
         JPanel controlPanel = new JPanel();

@@ -1,4 +1,5 @@
 package ntou.cs.java2024;
+
 import java.util.*;
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -37,19 +38,21 @@ public class Meals {
             BufferedImage background = ImageIO.read(new File("images/background.png"));
             Graphics2D g = background.createGraphics();
 
-            // 開啟抗鋸齒
-            g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            // 開啟抗鋸齒和高質量渲染
+            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+            g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
             // 設定字型顏色和大小
             g.setColor(Color.BLACK);
             g.setFont(new Font("標楷體", Font.BOLD, 20));
 
             // 繪製日期
-            String date =  new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             g.drawString(date, 10, 30);
 
-            int mealWidth = (int)(background.getWidth() * 0.4);
-            int mealHeight = (int)(background.getHeight() * 0.2);
+            int mealWidth = (int) (background.getWidth() * 0.45);
+            int mealHeight = (int) (background.getHeight() * 0.2);
             int x, y;
 
             String[] types = {"早餐", "午餐", "晚餐"};
@@ -66,10 +69,15 @@ public class Meals {
 
                 BufferedImage foodImage = ImageIO.read(new File(meal.getImagePath()));
                 // 縮放食物圖片以適應背景的一部分
-                Image scaledFoodImage = foodImage.getScaledInstance(mealWidth, mealHeight, Image.SCALE_SMOOTH);
+                BufferedImage scaledFoodImage = new BufferedImage(mealWidth, mealHeight, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = scaledFoodImage.createGraphics();
+                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                g2d.drawImage(foodImage, 0, 0, mealWidth, mealHeight, null);
+                g2d.dispose();
                 // 將食物圖片繪製到背景上的正確位置
-                x = (i % 2) == 0 ? (int)(background.getWidth() * 0.1) : (int)(background.getWidth() * 0.5);
-                y = (int)(background.getHeight() * 0.2) * (i + 1);
+                x = (i % 2) == 0 ? (int) (background.getWidth() * 0.1) : (int) (background.getWidth() * 0.1+mealWidth);
+                y = (int) (background.getHeight() * 0.2) * (i + 1);
                 g.drawImage(scaledFoodImage, x, y, null);
                 // 如果有心情，將心情繪製到圖片上
                 if (!meal.getMood().isEmpty()) {
@@ -77,16 +85,16 @@ public class Meals {
                     int moodY;
                     switch (types[i]) {
                         case "早餐":
-                            moodX = (int)(background.getWidth() * 0.5); 
-                            moodY = (int)(background.getHeight() * 0.25); // 距離上面20%
+                            moodX = (int) (x+mealWidth);
+                            moodY = (int) (background.getHeight() * 0.25); // 距離上面20%
                             break;
                         case "午餐":
-                            moodX = (int)(background.getWidth() * 0.1); // 距離左邊10%
-                            moodY = (int)(background.getHeight() * 0.45); // 距離上面40%
+                            moodX = (int) (background.getWidth() * 0.1); // 距離左邊10%
+                            moodY = (int) (background.getHeight() * 0.45); // 距離上面40%
                             break;
                         case "晚餐":
-                            moodX = (int)(background.getWidth() * 0.5);
-                            moodY = (int)(background.getHeight() * 0.65); // 距離上面60%
+                            moodX = (int) (x+mealWidth);
+                            moodY = (int) (background.getHeight() * 0.65); // 距離上面60%
                             break;
                         default:
                             moodX = 0;
@@ -99,10 +107,8 @@ public class Meals {
 
             g.dispose();
 
-            g.dispose();
-
             // 將結果寫入到新的圖片檔案
-            ImageIO.write(background, "png", new File("results/"+ new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".png"));
+            ImageIO.write(background, "png", new File("results/" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

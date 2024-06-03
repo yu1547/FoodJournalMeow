@@ -1,14 +1,15 @@
 package ntou.cs.java2024;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.awt.image.BufferedImage;
 
 class DrawPanel extends JPanel {
     private List<List<Point>> allPaths = new ArrayList<>();
@@ -53,13 +54,28 @@ class DrawPanel extends JPanel {
     public void setImage(String imagePath) {
         // Load and set image
         try {
-            Image originalImage = javax.imageio.ImageIO.read(new java.io.File(imagePath));
+            BufferedImage originalImage = javax.imageio.ImageIO.read(new java.io.File(imagePath));
             int panelWidth = getWidth();
             int panelHeight = getHeight();
-            image = new BufferedImage(panelWidth, panelHeight, BufferedImage.TYPE_INT_ARGB);
+
+            double originalWidth = originalImage.getWidth();
+            double originalHeight = originalImage.getHeight();
+            double aspectRatio = originalWidth / originalHeight;
+
+            int newWidth, newHeight;
+
+            if (panelWidth / aspectRatio <= panelHeight) {
+                newWidth = panelWidth;
+                newHeight = (int) (panelWidth / aspectRatio);
+            } else {
+                newHeight = panelHeight;
+                newWidth = (int) (panelHeight * aspectRatio);
+            }
+
+            image = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2d = image.createGraphics();
-            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            g2d.drawImage(originalImage, 0, 0, panelWidth, panelHeight, null);
+            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g2d.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
             g2d.dispose();
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,23 +105,30 @@ class DrawPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (image != null) {
-            g.drawImage(image, 0, 0, null);
+            int panelWidth = getWidth();
+            int panelHeight = getHeight();
+            int imageWidth = image.getWidth();
+            int imageHeight = image.getHeight();
+            int x = (panelWidth - imageWidth) / 2;
+            int y = (panelHeight - imageHeight) / 2;
+            g.drawImage(image, x, y, this);
         }
         Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setColor(currentColor);
+        g2d.setStroke(new BasicStroke(2));
+        for (int i = 0; i < allPaths.size(); i++) {
+            g2d.setColor(allColors.get(i)); // 設置颜色
+            Path2D path2D = createPathFromPoints(allPaths.get(i));
+            g2d.draw(path2D);
+        }
+        if (!currentPath.isEmpty()) {
             g2d.setColor(currentColor);
-            g2d.setStroke(new BasicStroke(2));
-            for (int i = 0; i < allPaths.size(); i++) {
-                g2d.setColor(allColors.get(i)); // 設置颜色
-                Path2D path2D = createPathFromPoints(allPaths.get(i));
-                g2d.draw(path2D);
-            }
-            if (!currentPath.isEmpty()) {
-                g2d.setColor(currentColor);
-                Path2D currentPath2D = createPathFromPoints(currentPath);
-                g2d.draw(currentPath2D);
-            }
-            g2d.dispose();
+            Path2D currentPath2D = createPathFromPoints(currentPath);
+            g2d.draw(currentPath2D);
+        }
+        g2d.dispose();
     }
+
     public double calculateArea(List<Point> points) {
         int n = points.size();
         double area = 0.0;
