@@ -189,6 +189,9 @@ public class MealPanel extends JPanel {
         meals.addFoodItem(date, type, mood, selectedPhotoPath);
         JOptionPane.showMessageDialog(this, "餐點已新增");
         selectedPhotoPath = "images/default2.png";
+
+        // 清空心情輸入框
+        moodField.setText("");
     }
 
     // 存檔按鈕的事件處理器
