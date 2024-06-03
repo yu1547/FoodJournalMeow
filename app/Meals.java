@@ -38,7 +38,7 @@ public class Meals {
             BufferedImage background = ImageIO.read(new File("images/background.png"));
             Graphics2D g = background.createGraphics();
 
-            // 開啟抗鋸齒和高質量渲染
+            // 開啟抗鋸齒和渲染
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
             g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -63,7 +63,7 @@ public class Meals {
             int textY = textHeight ;
             g.drawString(watermarkText, textX, textY);
 
-            // 加载并绘制 cat.png
+            // 浮水印 cat.png
             BufferedImage catImage = ImageIO.read(new File("images/cat.png"));
             int catImageWidth = (int)(catImage.getWidth()*0.5);
             int catImageHeight = (int)(catImage.getHeight()*0.5);
