@@ -4,6 +4,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +27,7 @@ public class MealPanel extends JPanel {
 
     private String selectedPhotoPath;
     private Meals meals;
+    private final String MOOD_HINT = "最多36字";
 
     public MealPanel() {
         exporter = new Exporter();
@@ -102,7 +105,36 @@ public class MealPanel extends JPanel {
         JPanel moodPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         moodPanel.setBackground(new Color(255, 245, 238)); // 背景色
         moodPanel.add(new JLabel("心情："));
-        moodField = new JTextField(10);
+        moodField = new JTextField(MOOD_HINT, 10);
+        moodField.setForeground(Color.GRAY);
+
+        moodField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (moodField.getText().equals(MOOD_HINT)) {
+                    moodField.setText("");
+                    moodField.setForeground(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (moodField.getText().isEmpty()) {
+                    moodField.setForeground(Color.GRAY);
+                    moodField.setText(MOOD_HINT);
+                }
+            }
+        });
+
+        moodField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (moodField.getText().length() > 36) {
+                    moodField.setText(moodField.getText().substring(0, 36));
+                }
+            }
+        });
+
         moodPanel.add(moodField);
         controlPanel.add(moodPanel);
 
@@ -184,6 +216,12 @@ public class MealPanel extends JPanel {
         }
 
         String mood = moodField.getText();
+        if (mood.equals(MOOD_HINT)) {
+            mood = "";
+        }
+        if (mood.length() > 36) {
+            mood = mood.substring(0, 36);
+        }
         String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
         meals.addFoodItem(date, type, mood, selectedPhotoPath);
@@ -191,7 +229,8 @@ public class MealPanel extends JPanel {
         selectedPhotoPath = "images/default2.png";
 
         // 清空心情輸入框
-        moodField.setText("");
+        moodField.setText(MOOD_HINT);
+        moodField.setForeground(Color.GRAY);
     }
 
     // 存檔按鈕的事件處理器
@@ -210,8 +249,6 @@ public class MealPanel extends JPanel {
         photoLabel.setIcon(photoIcon);
     }
 
-
-
     // 獲取選中的餐點類型
     private String getSelectedMealType() {
         if (breakfastButton.isSelected()) {
@@ -225,17 +262,15 @@ public class MealPanel extends JPanel {
     }
 
     private void exportImage() {
-    if (jpgButton.isSelected()) {
-        String filePath = getFilePath();  // 從檔案總管選擇一張照片並獲取其路徑
-        if (filePath != null) {  // 如果成功選擇了一張照片
-            exporter.exportPng(filePath);  // 使用 Exporter 的實例來調用 exportPng 方法
+        if (jpgButton.isSelected()) {
+            String filePath = getFilePath();  // 從檔案總管選擇一張照片並獲取其路徑
+            if (filePath != null) {  // 如果成功選擇了一張照片
+                exporter.exportPng(filePath);  // 使用 Exporter 的實例來調用 exportPng 方法
+            }
+        } else if (pdfButton.isSelected()) {
+            exporter.imagesToPDF();  // 使用 Exporter 的實例來調用 imagesToPDF 方法
         }
-    } else if (pdfButton.isSelected()) {
-        exporter.imagesToPDF();  // 使用 Exporter 的實例來調用 imagesToPDF 方法
     }
-}
-
-
 
     // 從檔案總管選擇一張照片並回傳其路徑
     private String getFilePath() {
@@ -254,7 +289,7 @@ public class MealPanel extends JPanel {
         return null;
     }
 
-private String getFilePath2() {
+    private String getFilePath2() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("選擇圖片");
         int returnValue = fileChooser.showOpenDialog(null);
@@ -269,5 +304,4 @@ private String getFilePath2() {
         }
         return null;
     }
-
 }
