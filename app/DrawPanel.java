@@ -27,7 +27,7 @@ class DrawPanel extends JPanel {
                     JOptionPane.showMessageDialog(DrawPanel.this, "請先選擇照片", "提示", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
-                currentPath.clear();
+                currentPath.clear();//如果有圖像，會清除當前的繪圖路徑並記錄滑鼠按下的起始點
                 currentPath.add(e.getPoint());
                 repaint();
             }
@@ -37,10 +37,10 @@ class DrawPanel extends JPanel {
                 if (image == null) {
                     return;
                 }
-                currentPath.add(e.getPoint());
+                currentPath.add(e.getPoint());//如果有圖像，會記錄滑鼠釋放的結束點
                 allPaths.add(new ArrayList<>(currentPath)); // 將當前路徑加到所有路徑中
-                allColors.add(currentColor);
-                currentPath.clear();
+                allColors.add(currentColor);//記錄當前使用的顏色
+                currentPath.clear();//然後清除當前路徑以便下次繪圖使用。
                 repaint();
             }
         });
@@ -51,7 +51,7 @@ class DrawPanel extends JPanel {
                 if (image == null) {
                     return;
                 }
-                currentPath.add(e.getPoint());
+                currentPath.add(e.getPoint());//如果有圖像，會記錄滑鼠拖動過的每個點，形成一條路徑。
                 repaint();
             }
         });
@@ -100,13 +100,13 @@ class DrawPanel extends JPanel {
     }
 
     private Path2D createPathFromPoints(List<Point> points) {
-        Path2D path = new Path2D.Double();
+        Path2D path = new Path2D.Double();//處理雙精度坐標
         if (!points.isEmpty()) {
-            path.moveTo(points.get(0).x, points.get(0).y);
+            path.moveTo(points.get(0).x, points.get(0).y);//移到起始點
             for (Point p : points) {
-                path.lineTo(p.x, p.y);
+                path.lineTo(p.x, p.y);//連接每一個點形成路徑
             }
-            path.closePath();
+            path.closePath();//要計算面積，所以把路徑封閉
         }
         return path;
     }
@@ -123,6 +123,7 @@ class DrawPanel extends JPanel {
             int y = (panelHeight - imageHeight) / 2;
             g.drawImage(image, x, y, this);
         }
+        //創建一個新的 Graphics2D 對象來繪製所有已記錄的路徑，每條路徑使用對應的顏色
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setColor(currentColor);
         g2d.setStroke(new BasicStroke(2));
@@ -131,7 +132,7 @@ class DrawPanel extends JPanel {
             Path2D path2D = createPathFromPoints(allPaths.get(i));
             g2d.draw(path2D);
         }
-        if (!currentPath.isEmpty()) {
+        if (!currentPath.isEmpty()) {//如果當前有未完成的路徑，則使用當前顏色繪製這條路徑。
             g2d.setColor(currentColor);
             Path2D currentPath2D = createPathFromPoints(currentPath);
             g2d.draw(currentPath2D);

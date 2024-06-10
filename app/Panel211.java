@@ -166,10 +166,10 @@ public class Panel211 extends JPanel {
         public void actionPerformed(ActionEvent e) {
             Map<Color, Double> areasByColor = drawPanel.calculateAreasByColor();
 
-        // 计算总面积
+        // 計算總面积
             double totalArea = areasByColor.values().stream().mapToDouble(Double::doubleValue).sum();
 
-        // 计算比例
+        // 計算比例
             double greenArea = areasByColor.getOrDefault(Color.GREEN, 0.0);
             double yellowArea = areasByColor.getOrDefault(Color.YELLOW, 0.0);
             double redArea = areasByColor.getOrDefault(Color.RED, 0.0);
