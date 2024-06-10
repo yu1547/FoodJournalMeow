@@ -187,8 +187,8 @@ public class Panel211 extends JPanel {
                 // 符合條件
                 match.setText("符合2:1:1");
             }
-            else if((greenRatio - (yellowRatio*2)) < 0 && Math.abs(greenRatio - (yellowRatio*2))<=2 
-                        || (greenRatio - (redRatio*2)) < 0 && Math.abs(greenRatio - (yellowRatio*2))<=2)
+            else if(((greenRatio - (yellowRatio*2)) < 0 && Math.abs(greenRatio - (yellowRatio*2))<=2)
+                        || ((greenRatio - (redRatio*2)) < 0 && Math.abs(greenRatio - (redRatio*2))<=2))
             {
                 match.setText("符合2:1:1");
             }
