@@ -1,4 +1,5 @@
 package ntou.cs.java2024;
+
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import javax.imageio.ImageIO;
@@ -8,30 +9,36 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import javax.swing.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Exporter {
 
-   public void exportPng(String filename) {
-        // Show file chooser to select save location
+    public void exportPng(String filename) {
+        // 取得當日日期作為預設檔名
+        String defaultFileName = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".png";
+        
+        // 顯示檔案選擇器以選擇儲存位置
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("選擇儲存的地點");
+        fileChooser.setSelectedFile(new File(defaultFileName));  // 設定預設檔名
 
         int userSelection = fileChooser.showSaveDialog(null);
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File fileToSave = fileChooser.getSelectedFile();
-            // Add file extension if not provided
+            // 加上檔案副檔名如果未提供
             if (!fileToSave.getAbsolutePath().endsWith(".png")) {
                 fileToSave = new File(fileToSave.getAbsolutePath() + ".png");
             }
             try {
-                // Load the image
+                // 載入圖片
                 BufferedImage image = ImageIO.read(new File(filename));
-                // Save the image
+                // 儲存圖片
                 ImageIO.write(image, "png", fileToSave);
-                JOptionPane.showMessageDialog(null, "Image saved successfully: " + fileToSave.getAbsolutePath());
+                JOptionPane.showMessageDialog(null, "圖片儲存成功: " + fileToSave.getAbsolutePath());
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Failed to save image: " + e.getMessage());
+                JOptionPane.showMessageDialog(null, "儲存圖片失敗: " + e.getMessage());
             }
         }
     }
@@ -43,16 +50,22 @@ public class Exporter {
     int returnValue = fileChooser.showOpenDialog(null);
     if (returnValue == JFileChooser.APPROVE_OPTION) {
         File[] selectedFiles = fileChooser.getSelectedFiles();
+        int fileCount = selectedFiles.length;
+        
+        // 取得當日日期作為預設檔名的一部分
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        String defaultFileName = fileCount + "日食記圖" + currentDate + ".pdf";
 
-        // Show file chooser to select save location for PDF
+        // 顯示檔案選擇器以選擇 PDF 儲存位置
         JFileChooser pdfFileChooser = new JFileChooser();
         pdfFileChooser.setDialogTitle("選擇儲存的地點");
+        pdfFileChooser.setSelectedFile(new File(defaultFileName));  // 設定預設檔名
 
         int userSelection = pdfFileChooser.showSaveDialog(null);
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File pdfFileToSave = pdfFileChooser.getSelectedFile();
-            // Add file extension if not provided
+            // 加上檔案副檔名如果未提供
             if (!pdfFileToSave.getAbsolutePath().endsWith(".pdf")) {
                 pdfFileToSave = new File(pdfFileToSave.getAbsolutePath() + ".pdf");
             }
@@ -64,19 +77,20 @@ public class Exporter {
 
                 for (File file : selectedFiles) {
                     String filePath = file.getAbsolutePath();
-                    if(new File(filePath).exists()) {
+                    if (new File(filePath).exists()) {
                         Image img = Image.getInstance(filePath);
                         document.add(img);
                     }
                 }
 
                 document.close();
-                System.out.println("PDF Created at: " + pdfFileToSave.getAbsolutePath());
+                System.out.println("PDF 已建立: " + pdfFileToSave.getAbsolutePath());
             } catch (DocumentException | IOException e) {
                 e.printStackTrace();
             }
         }
     }
 }
+
 
 }
