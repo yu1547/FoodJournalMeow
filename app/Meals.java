@@ -121,7 +121,22 @@ public class Meals {
                             moodY = 0;
                     }
                     g.setFont(new Font("標楷體", Font.PLAIN, 20)); // 设置心情的字体大小
-                    g.drawString(meal.getMood(), moodX, moodY);
+
+                    // 分割心情字符串每9個字符換一行，限制顯示4行
+                    String mood = meal.getMood();
+                    java.util.List<String> moodLines = new ArrayList<>();
+                    for (int j = 0; j < mood.length(); j += 9) {
+                        if (moodLines.size() < 4) {
+                            moodLines.add(mood.substring(j, Math.min(j + 9, mood.length())));
+                        } else {
+                            break;
+                        }
+                    }
+
+                    // 繪製每行心情文本
+                    for (int j = 0; j < moodLines.size(); j++) {
+                        g.drawString(moodLines.get(j), moodX, moodY + (j * textHeight));
+                    }
                 }
             }
 
