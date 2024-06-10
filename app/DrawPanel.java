@@ -23,6 +23,10 @@ class DrawPanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                if (image == null) {
+                    JOptionPane.showMessageDialog(DrawPanel.this, "請先選擇照片", "提示", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
                 currentPath.clear();
                 currentPath.add(e.getPoint());
                 repaint();
@@ -30,6 +34,9 @@ class DrawPanel extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
+                if (image == null) {
+                    return;
+                }
                 currentPath.add(e.getPoint());
                 allPaths.add(new ArrayList<>(currentPath)); // 將當前路徑加到所有路徑中
                 allColors.add(currentColor);
@@ -41,6 +48,9 @@ class DrawPanel extends JPanel {
         addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
+                if (image == null) {
+                    return;
+                }
                 currentPath.add(e.getPoint());
                 repaint();
             }

@@ -28,6 +28,7 @@ public class Panel211 extends JPanel {
     private ButtonGroup brushColor;
     private JTextField ratio;
     private JTextField match;
+    private JTextArea advice;
     private Color currentColor = Color.BLACK;
     private DrawPanel drawPanel;
 
@@ -103,6 +104,10 @@ public class Panel211 extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 drawPanel.clear();
+                ratio.setText("");
+                match.setText("");
+                advice.setText("");
+                advice.setVisible(false);
             }
         });
         brushPanel.add(redPen);
@@ -140,13 +145,18 @@ public class Panel211 extends JPanel {
         JLabel label1 = new JLabel("蔬菜 : 蛋白質 : 澱粉");
         ratio = new JTextField(10);
         match = new JTextField(10);
+        advice = new JTextArea();
         ratio.setEditable(false);
         match.setEditable(false);
+        advice.setEditable(false);
         ratio.setBackground(new Color(255, 245, 238));
         match.setBackground(new Color(255, 245, 238));
+        advice.setBackground(new Color(255, 245, 238));
+        advice.setVisible(false);
         resultPanel.add(label1);
         resultPanel.add(ratio);
         resultPanel.add(match);
+        resultPanel.add(advice);
 
         addAndDisplayPanel.add(addPhotoPanel);
         addAndDisplayPanel.add(resultPanel);
@@ -170,21 +180,28 @@ public class Panel211 extends JPanel {
             ratio.setText(String.format("%.2f : %.2f : %.2f", greenRatio, yellowRatio, redRatio));
             double redYellowArea = redArea + yellowArea;
             double ratio = greenArea / redYellowArea;
+            advice.setVisible(false);
 
-            if ((greenRatio - (yellowRatio*2)) >= 0 && (greenRatio - (redRatio*2)) >= 0 ) {
+            if ((greenRatio - (yellowRatio*2)) >= 0 && (greenRatio - (redRatio*2)) >= 0 ) 
+            {
                 // 符合條件
                 match.setText("符合2:1:1");
-            } else {
+            }
+            else if((greenRatio - (yellowRatio*2)) < 0 && Math.abs(greenRatio - (yellowRatio*2))<=2 
+                        || (greenRatio - (redRatio*2)) < 0 && Math.abs(greenRatio - (yellowRatio*2))<=2)
+            {
+                match.setText("符合2:1:1");
+            }
+            else 
+            {
                 // 不符合條件
                 match.setText("不符合2:1:1 !");
                 JLabel label2 = new JLabel("建議：");
-                JTextArea advice = new JTextArea();
+                advice.setVisible(true);
                 advice.setText(giveAdvice(greenRatio, yellowRatio, redRatio));
                 advice.setEditable(false);
                 advice.setBackground(new Color(255, 245, 238));
                 
-                resultPanel.add(label2);
-                resultPanel.add(advice);
             }
         }
 });
@@ -198,11 +215,14 @@ public class Panel211 extends JPanel {
             String path = fileChooser.getSelectedFile().getAbsolutePath();
             drawPanel.setImage(path);
         }
+        else{
+            JOptionPane.showMessageDialog(this, "未選擇照片", "提示", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     private String giveAdvice(double green, double yellow, double red) {
         // 計算邏輯
-        String str = "";
+        String str = "建議：\n";
         if((green - yellow*2) < 0 || (green - red*2) < 0)
         {
             str += "增加蔬菜量\n";

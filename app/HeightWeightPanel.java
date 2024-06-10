@@ -54,6 +54,7 @@ public class HeightWeightPanel extends JPanel {
 
         //身高
         heightPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        heightPanel.setBackground(new Color(255, 245, 238));
         heightLabel = new JLabel("身高：");
         heightField = new JTextField(10);
         heightPanel.add(heightLabel);
@@ -61,6 +62,7 @@ public class HeightWeightPanel extends JPanel {
 
         //體重
         weightPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        weightPanel.setBackground(new Color(255, 245, 238));
         weightLabel = new JLabel("體重：");
         weightField = new JTextField(10);
         weightPanel.add(weightLabel);
