@@ -29,7 +29,8 @@ public class GraphGenerator extends JFrame{
     public GraphGenerator(String title, String choose) {
         super(title);
         this.choose = choose;
-
+    }
+    public void generateGraph() {
         // Create the time series for price and volume
         TimeSeries heightSeries = new TimeSeries("Height (cm)");
         TimeSeries weightSeries = new TimeSeries("Weight (kg)");
@@ -66,12 +67,12 @@ public class GraphGenerator extends JFrame{
             heightAxis.setRange(minHeight - 2, maxHeight + 2);
             heightAxis.setTickUnit(new NumberTickUnit(1));
         }
-        // Configure the price renderer
+        // Configure the height renderer
         XYLineAndShapeRenderer heightRenderer = new XYLineAndShapeRenderer();
         heightRenderer.setSeriesPaint(0, java.awt.Color.RED);
         plot.setRenderer(0, heightRenderer);
 
-        // Create a secondary axis for the volume data
+        // Create a secondary axis for the weight data
         NumberAxis weightAxis = new NumberAxis("Weight");
         weightAxis.setRange(minWeight-2, maxWeight+2);
         weightAxis.setNumberFormatOverride(new java.text.DecimalFormat("###,##0.00"));
@@ -87,13 +88,13 @@ public class GraphGenerator extends JFrame{
         plot.setDataset(1, weightDataset);
         plot.mapDatasetToRangeAxis(1, 1);
 
-        // Configure the volume renderer
+        // Configure the weight renderer
         XYBarRenderer weightRenderer = new XYBarRenderer(0.20);
         weightRenderer.setSeriesPaint(0, java.awt.Color.BLUE);
         weightRenderer.setShadowVisible(false);
         plot.setRenderer(1, weightRenderer);
 
-        // Ensure the price (line) is rendered on top of the volume (bar)
+        // Ensure the height (line) is rendered on top of the volume (bar)
         plot.setDatasetRenderingOrder(DatasetRenderingOrder.REVERSE);
 
         // Customizing the date format on the domain axis

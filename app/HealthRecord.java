@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 public class HealthRecord {
     private LocalDate date;
     private double height; // in cm
@@ -26,12 +28,15 @@ public class HealthRecord {
 
     private static Double getLastRecordValue(Sheet sheet, int cellIndex) {
         int lastRowNum = sheet.getPhysicalNumberOfRows()-1;
-        if (lastRowNum > 0) {
-            Row lastRow = sheet.getRow(lastRowNum);
-            if (lastRow != null) {
-                Cell cell = lastRow.getCell(cellIndex);
+        for (int i = lastRowNum; i >= 1; i--) {
+            Row row = sheet.getRow(i);
+            if (row != null) {
+                Cell cell = row.getCell(cellIndex);
                 if (cell != null) {
-                    return cell.getNumericCellValue();
+                    // 檢查單元格的類型是否為數字
+                    if (cell.getCellType() == CellType.NUMERIC) {
+                        return cell.getNumericCellValue();
+                    }
                 }
             }
         }
@@ -88,6 +93,10 @@ public class HealthRecord {
             }
             else if (weight == 0.0 && lastWeight != null && height != 0.0) {
                 weight = lastWeight;
+            }
+            else if(height == 0.0 && weight == 0.0)
+            {
+                JOptionPane.showMessageDialog(null, "未輸入身高和體重", "提示", JOptionPane.WARNING_MESSAGE);
             }
             
 

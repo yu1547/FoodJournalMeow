@@ -60,7 +60,6 @@ public class ExcelDataReader {
             {
                 daysToSubtract = 29;
             }
-             // Change this to 7 if you want to read data for the last 7 days
             calendar.add(Calendar.DAY_OF_YEAR, -daysToSubtract);
             startDate = calendar.getTime();
             

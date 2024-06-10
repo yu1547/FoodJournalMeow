@@ -114,7 +114,7 @@ public class HeightWeightPanel extends JPanel {
         private void updateChart() {
             double height = heightField.getText().isEmpty() ? 0.0 : Double.parseDouble(heightField.getText());
             double weight = weightField.getText().isEmpty() ? 0.0 : Double.parseDouble(weightField.getText());
-    
+
             String choose;
             if (sevenDaysRadioButton.isSelected()) {
                 choose = "week";
@@ -126,11 +126,17 @@ public class HeightWeightPanel extends JPanel {
             HealthRecord record = new HealthRecord(LocalDate.now(), height, weight);
             record.saveRecord("health_records.xlsx");
 
+            if (height == 0.0 && weight == 0.0) {
+                return;
+            }
+
             if (chartPanel != null) {
                 mainPanel.remove(chartPanel); // 移除舊的
             }
     
-            chartPanel = new GraphGenerator("Height and Weight Change Chart", choose).getChartPanel();
+            GraphGenerator graphGenerator = new GraphGenerator("Height and Weight Change Chart", choose);
+            graphGenerator.generateGraph();
+            chartPanel = graphGenerator.getChartPanel();
             mainPanel.add(chartPanel, BorderLayout.CENTER);
     
             mainPanel.revalidate();
