@@ -10,8 +10,9 @@ import java.util.Date;
 
 public class Meals {
     private Map<String, Meal> meals;
-    private final String DEFAULT_IMAGE_PATH1 = "/images/default1.png";
-    private final String DEFAULT_IMAGE_PATH2 = "/images/default2.png";
+    private final String DEFAULT_IMAGE_PATH1 = "images/default1.png";
+    private final String DEFAULT_IMAGE_PATH2 = "images/default2.png";
+
     public Meals() {
         this.meals = new LinkedHashMap<>();
     }
@@ -33,7 +34,7 @@ public class Meals {
 
     public void exportMealImage() {
         try {
-            BufferedImage background = ImageIO.read(getClass().getResourceAsStream("/images/background.png"));
+            BufferedImage background = ImageIO.read(new File("images/background.png"));
             Graphics2D g = background.createGraphics();
 
             // 開啟抗鋸齒和渲染
@@ -62,7 +63,8 @@ public class Meals {
             g.drawString(watermarkText, textX, textY);
 
             // 浮水印 cat.png
-            BufferedImage catImage = ImageIO.read(getClass().getResourceAsStream("/images/cat.png"));int catImageWidth = (int)(catImage.getWidth()*0.5);
+            BufferedImage catImage = ImageIO.read(new File("images/cat.png"));
+            int catImageWidth = (int)(catImage.getWidth()*0.5);
             int catImageHeight = (int)(catImage.getHeight()*0.5);
             int catX = textX + textWidth ;
             int catY = 10;
@@ -84,7 +86,7 @@ public class Meals {
                     meal = new Meal(date, types[i], "我沒有吃" + types[i], DEFAULT_IMAGE_PATH1);
                 }
 
-                BufferedImage foodImage = ImageIO.read(getClass().getResourceAsStream(meal.getImagePath()));
+                BufferedImage foodImage = ImageIO.read(new File(meal.getImagePath()));
                 // 縮放食物圖片以適應背景的一部分
                 BufferedImage scaledFoodImage = new BufferedImage(mealWidth, mealHeight, BufferedImage.TYPE_INT_ARGB);
                 Graphics2D g2d = scaledFoodImage.createGraphics();
